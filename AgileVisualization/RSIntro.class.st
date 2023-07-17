@@ -35,7 +35,7 @@ RSIntro >> animations [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> arrowedLin [
 	"Run the example to see the results:
 	
@@ -64,7 +64,7 @@ RSIntro >> arrowedLin [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> arrowedLine [
 	"Run the example to see the results:
 	
@@ -93,7 +93,7 @@ RSIntro >> arrowedLine [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> border [
 "Run the example to see the result:
 	
@@ -121,7 +121,7 @@ c @ RSCanvasController .
 c open.
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> borderDashed [
 	"Run the example to see the result:
 	
@@ -158,7 +158,7 @@ RSIntro >> borderDashed [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> box [
 "Run the example to see the results:
 	
@@ -173,7 +173,7 @@ RSIntro >> box [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> boxRadius [
 	"Run the example to see the results:
 	
@@ -345,7 +345,7 @@ RSIntro >> chartingData [
 	b canvas open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> circle [
 
 "Run the example to see the results:
@@ -631,7 +631,7 @@ RSIntro >> interactions [
 	canvas open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> label [
 "Run the example to see the results: 
 	
@@ -646,7 +646,7 @@ c @ RSCanvasController.
 c open.
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> labelBaseline [
 	"Run the example to see the results: 
 	
@@ -673,7 +673,7 @@ RSIntro >> labelBaseline [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> labelComplex [
 	"Run the example to see the results: 
 	
@@ -700,7 +700,7 @@ RSIntro >> labelComplex [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> labelFont [
 	"Run the example to see the results: 
 	
@@ -762,7 +762,7 @@ RSIntro >> layouts [
 	canvas open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> line [ 
 "Run the example to see the results: 
 	
@@ -781,7 +781,7 @@ RSIntro >> line [
 	c open.
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> lineAttachPoint [
 	"Run the example to see the results:
 
@@ -820,7 +820,7 @@ RSIntro >> lineAttachPoint [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> lineBetweenShapes [
 	"Run the example to see the results: 
 	
@@ -849,7 +849,7 @@ c add: line.
 c open.
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> lineControlPoints [
 	"Run the eaxmple to see the results: 
 	
@@ -871,7 +871,7 @@ RSIntro >> lineControlPoints [
 	canvas open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> lineControlPointsConroller [
 	"Run the eaxmple to see the results: 
 	
@@ -906,7 +906,7 @@ RSIntro >> lineControlPointsConroller [
 	canvas open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> lineControlPointsDraggable [
 	"Run the eaxmple to see the results: 
 	
@@ -946,7 +946,7 @@ RSIntro >> lineControlPointsDraggable [
 	canvas open.
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> lineMarker [
 	"Run the example to see the results:
 	
@@ -981,7 +981,7 @@ RSIntro >> lineMarker [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> lineMarkerLabels [
 	"Run the example to see the results:
 	
@@ -1020,7 +1020,7 @@ RSIntro >> lineMarkerLabels [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> markerOffset [
 	"Set the marker away from the extremity"
 
@@ -1067,7 +1067,7 @@ RSIntro >> markerOffset [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> markreOffset [
 	"Set the marker away from the extremity"
 
@@ -1173,7 +1173,7 @@ RSIntro >> menuToolbarWithFixedShapes [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> model [
 	"A shape can have a model object that it is intended to represent."
 
@@ -1198,7 +1198,7 @@ RSIntro >> model [
 	c open.
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> modelNormalizer [
 	"A shape can have a model object that it is intended to represent."
 
@@ -1279,7 +1279,7 @@ RSIntro >> normalizer [
 	c open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> polygon [
 "Run the example to see the results:
 
@@ -1338,7 +1338,7 @@ lbl when: RSMouseClick do: [ :evt | win delete ] for: lbl.
 
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> rotation [
 "Run the example to see the results:
 
@@ -1428,7 +1428,7 @@ RSIntro >> sunburst [
 	sb canvas open
 ]
 
-{ #category : #'chapter-7' }
+{ #category : #'chapter-7 (Shapes)' }
 RSIntro >> svgPath [
 	"Run the example to see the results: 
 	
