@@ -1021,6 +1021,53 @@ RSIntro >> lineMarkerLabels [
 ]
 
 { #category : #'chapter-7' }
+RSIntro >> markerOffset [
+	"Set the marker away from the extremity"
+
+	"Run the example to see the results:
+	
+	RSintro new markerOffset
+	
+	"
+
+	| c markerShape target starts line |
+	c := RSCanvas new.
+
+	markerShape := RSPolygon new
+		               privatePoints: {
+				               (-3 @ 9).
+				               (0 @ 0).
+				               (3 @ 9).
+				               (0 @ 0) };
+		               border: (RSBorder new width: 1);
+		               asMarker.
+	markerShape offsetRatio: 0.3.
+
+	target := RSLabel text: 'target'.
+	c add: target.
+
+	starts := RSCircle models: (1 to: 20).
+	starts @ RSDraggable.
+	c addAll: starts.
+
+	starts do: [ :startShape |
+		line := RSLine new.
+		line from: startShape.
+		line to: target.
+		line withBorderAttachPoint.
+		line markerEnd: markerShape.
+		c add: line
+		].
+
+	RSForceBasedLayout new
+		charge: -300;
+		on: c nodes.
+
+	c zoomToFit.
+	c open
+]
+
+{ #category : #'chapter-7' }
 RSIntro >> markreOffset [
 	"Set the marker away from the extremity"
 
