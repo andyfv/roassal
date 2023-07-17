@@ -93,6 +93,37 @@ RSIntro >> arrowedLine [
 	c open
 ]
 
+{ #category : #'chapter-8 (Line Builder)' }
+RSIntro >> associations [
+	"Run the example to see the results: 
+	
+	RSIntro new associations
+	
+	"
+
+	| c |
+	c := RSCanvas new.
+	c addAll: (RSCircle models: (1 to: 4)).
+	c shapes @ RSDraggable @ RSPopup.
+
+	RSLineBuilder line
+		color: Color red translucent;
+		canvas: c;
+		withBorderAttachPoint;
+		useAssociations: {
+				(1 -> 2).
+				(2 -> 3).
+				(4 -> 1).
+				(3 -> 4) }.
+
+	RSGridLayout new
+		gapSize: 30;
+		on: c nodes.
+
+	c @ RSCanvasController.
+	c open
+]
+
 { #category : #'chapter-7 (Shapes)' }
 RSIntro >> border [
 "Run the example to see the result:
@@ -366,6 +397,102 @@ c @ RSCanvasController .
 c open.
 ]
 
+{ #category : #'chapter-8 (Line Builder)' }
+RSIntro >> classDiagram [
+"Run the example to see the results:
+	
+	RSIntro new classDiagram
+	
+	"
+
+| classes c boxes fromBox toBox line |
+
+classes := Collection withAllSubclasses .
+
+c := RSCanvas new.
+
+"Build nodes"
+boxes := RSCircle models: classes.
+
+c addAll: boxes.
+
+RSFlowLayout on: c shapes.
+
+"Connect nodes"
+classes do: [ :cls | 
+	fromBox := boxes shapeFromModel: cls superclass.
+	toBox := boxes shapeFromModel: cls .
+	
+	fromBox ifNotNil: [ 
+		line := RSLine new.
+		line from: fromBox.
+		line to: toBox.
+		c add: line 
+		].
+	].	
+	
+	RSTreeLayout on: c nodes.
+	c @ RSCanvasController.
+	c open.
+
+]
+
+{ #category : #'chapter-8 (Line Builder)' }
+RSIntro >> classDiagramImproved [
+	"Run the example to see the results:
+	
+	RSIntro new classDiagramImproved
+	
+	"
+
+	| classes c boxes lb |
+	classes := Collection withAllSubclasses.
+
+	c := RSCanvas new.
+
+	"Build nodes"
+	boxes := RSCircle models: classes.
+
+	c addAll: boxes.
+
+	lb := RSLineBuilder line.
+	lb shapes: boxes.
+	lb connectFrom: #superclass.
+
+	RSTreeLayout on: c nodes.
+	c @ RSCanvasController.
+	c open
+]
+
+{ #category : #'chapter-8 (Line Builder)' }
+RSIntro >> classDiagramImprovedV2 [
+	"Run the example to see the results:
+	
+	RSIntro new classDiagramImprovedV2
+	
+	"
+
+	| classes c boxes lb |
+	classes := Collection withAllSubclasses.
+
+	c := RSCanvas new.
+
+	"Build nodes"
+	boxes := RSCircle models: classes.
+
+	c addAll: boxes.
+
+	lb := RSLineBuilder orthoVertical.
+	lb withVerticalAttachPoint.
+	lb capRound.
+	lb shapes: boxes.
+	lb connectFrom: #superclass.
+
+	RSTreeLayout on: c nodes.
+	c @ RSCanvasController.
+	c open
+]
+
 { #category : #'chapter-6 (Canvas)' }
 RSIntro >> convertingCanvas [
 "Convert canvas to a shape"
@@ -583,6 +710,48 @@ RSIntro >> graphRendering [
 		on: nodes.
 	canvas @ RSCanvasController.
 	canvas open
+]
+
+{ #category : #'chapter-8 (Line Builder)' }
+RSIntro >> graphVisualization [
+	"Run the example to see the results:
+	
+	RSIntro new graphVisualization 
+	
+	"
+
+	| numberOfNodes r graph numberOfLines fromNode toNode c nodes lb |
+	numberOfNodes := 25.
+	numberOfLines := 90.
+	r := Random seed: 42.
+	graph := Dictionary new.
+
+	1 to: numberOfNodes do: [ :aNode | graph at: aNode put: Set new ].
+
+	numberOfLines timesRepeat: [
+		fromNode := r nextInteger: numberOfNodes.
+		toNode := r nextInteger: numberOfNodes.
+		(graph at: fromNode) add: toNode ].
+
+	c := RSCanvas new.
+	nodes := RSLabel models: (1 to: numberOfNodes).
+	nodes color: Color red.
+	nodes @ RSDraggable @ RSPopup.
+	c addAll: nodes.
+
+	lb := RSLineBuilder line.
+	lb canvas: c.
+	lb withBorderAttachPoint.
+	lb makeBidirectional.
+	lb moveBehind.
+	lb objects: (1 to: numberOfNodes).
+	lb connectToAll: [ :aNumber | graph at: aNumber ].
+
+	RSForceBasedLayout new
+		charge: -300;
+		on: nodes.
+	c @ RSCanvasController.
+	c open
 ]
 
 { #category : #'chapter-5 (Architecture Overview)' }
