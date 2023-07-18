@@ -493,6 +493,113 @@ RSIntro >> classDiagramImprovedV2 [
 	c open
 ]
 
+{ #category : #'chapter-9 (Shape Composition)' }
+RSIntro >> compositeShapes [
+	"Run the example to see the results:
+
+	RSIntro new compositeShapes
+	
+	"
+
+	| c g |
+	c := RSCanvas new.
+	1 to: 10 do: [ :i |
+		g := RSGroup new.
+		i timesRepeat: [ g add: RSCircle new ].
+		RSFlowLayout on: g.
+		c add: g asShape
+		].
+	
+	RSGridLayout new gapSize: 50; on: c shapes.
+	c shapes @ RSDraggable @ RSHighlightable red.
+	c zoomToFit.
+	c open.
+]
+
+{ #category : #'chapter-9 (Shape Composition)' }
+RSIntro >> compositeWithLabels [
+	"Run the example to see the results:
+
+	RSIntro new compositeWithLabels
+	
+	"
+
+	| c g compositeShape title |
+	c := RSCanvas new.
+
+	1 to: 10 do: [ :i |
+		g := RSGroup new.
+		i timesRepeat: [ g add: RSCircle new ].
+		RSFlowLayout on: g.
+
+		title := RSLabel text: i 			"Create Label".
+		RSVerticalLineLayout new 			"Set the Label to align vertically"
+			alignCenter;
+			on: {
+					title.
+					g }.
+		g add: title 								"Add the Label to the group".
+
+		compositeShape := g asShape.
+		compositeShape borderColor: Color black.
+		compositeShape padding: 5.
+		c add: compositeShape
+		].
+
+	RSGridLayout new
+		gapSize: 50;
+		on: c shapes.
+
+	c shapes @ RSDraggable @ RSHighlightable red.
+	c zoomToFit.
+	c open
+]
+
+{ #category : #'chapter-9 (Shape Composition)' }
+RSIntro >> compositeWithLines [
+	"Run the example to see the results:
+
+	RSIntro new compositeWithLines
+	
+	"
+
+	| c g compositeShape title lb |
+	c := RSCanvas new.
+
+	1 to: 100 by: 10 do: [ :i |
+		g := RSCircle models: (1 to: i) forEach: [ :s :nb | s color: Color random translucent ].
+		
+		lb := RSLineBuilder line.
+		lb canvas: g.
+		lb shapes: g.
+		lb connectFrom: [ :nb | nb // 2 ].
+		
+		RSRadialTreeLayout on: g nodes.
+		
+		title := RSLabel new fontSize: 20; text: i.
+		RSVerticalLineLayout new 			"Set the Label to align vertically"
+			alignCenter;
+			on: {
+					title.
+					g }.
+		g add: title 								"Add the Label to the group".
+
+		compositeShape := g asShape.
+		compositeShape borderColor: Color black.
+		compositeShape padding: 5.
+		c add: compositeShape
+		].
+
+	RSGridLayout new
+		gapSize: 50;
+		on: c shapes.
+
+	c shapes @ RSDraggable @ RSHighlightable red.
+	c @ RSCanvasController .
+	c zoomToFit.
+	c open
+]
+
 { #category : #'chapter-6 (Canvas)' }
 RSIntro >> convertingCanvas [
 "Convert canvas to a shape"
@@ -888,6 +995,30 @@ RSIntro >> labelFont [
 		].
 	
 	RSVerticalLineLayout on: c shapes.
+	c @ RSCanvasController.
+	c open.
+]
+
+{ #category : #'chapter-9 (Shape Composition)' }
+RSIntro >> labeledCircles [
+"Run the example to see the results:
+	
+	RSIntro new labeledCircles
+	
+	"
+	
+	| c labeledCircle lb |
+	c := RSCanvas new.
+	1 to: 30 do: [ :aNumber |
+		labeledCircle := { RSCircle new size: 30 . RSLabel new color: Color black; text: aNumber } asGroup asShapeFor: aNumber. 
+		c add: labeledCircle .
+		].
+	lb := RSLineBuilder line.
+	lb withBorderAttachPoint .
+	lb shapes: c nodes.
+	lb connectFrom: [ :v | v // 2 ].
+	
+	RSTreeLayout on: c nodes.
 	c @ RSCanvasController.
 	c open.
 ]
@@ -1367,6 +1498,40 @@ RSIntro >> model [
 	c open.
 ]
 
+{ #category : #'chapter-9 (Shape Composition)' }
+RSIntro >> modelLineBuilder [
+	"Run the example to see the results:
+
+	RSIntro new modelLineBuilder
+	
+	"
+
+	| c classes boxes lb |
+	classes := ByteArray withAllSubclasses.
+
+	c := RSCanvas new.
+
+	boxes := RSComposite models: classes forEach: [  :composite :cls |
+		         composite add: (  RSLabel new text: cls name  ).
+		         composite add:
+			         (  RSBox new size: cls numberOfLinesOfCode sqrt + 5  ).
+		         RSVerticalLineLayout new
+			         alignCenter;
+			         on: composite children.
+		         composite @ RSDraggable
+		         ].
+	c addAll: boxes.
+	
+	lb := RSLineBuilder line.
+	lb withVerticalAttachPoint .
+	lb shapes: boxes .
+	lb connectFrom: #superclass.
+
+	RSTreeLayout on: c nodes.
+	c @ RSCanvasController .
+	c open
+]
+
 { #category : #'chapter-7 (Shapes)' }
 RSIntro >> modelNormalizer [
 	"A shape can have a model object that it is intended to represent."
@@ -1403,6 +1568,27 @@ RSIntro >> modelNormalizer [
 	RSGridLayout on: c shapes.
 	c zoomToFit.
 	c open
+]
+
+{ #category : #'chapter-9 (Shape Composition)' }
+RSIntro >> modelObject [
+"Run the example to see the results:
+
+	RSIntro new modelObject
+	
+	"
+	
+	| c compShape |
+	c := RSCanvas new.
+	
+	compShape := RSComposite model: 'Hello' 	forIt: [ :composite :title |
+			composite add: (RSLabel text: title).
+			composite add: (RSCircle new size: 20).
+			RSVerticalLineLayout new alignCenter ; on: composite shapes.
+			composite @ RSDraggable .
+			].
+		c add: compShape.
+		c open.
 ]
 
 { #category : #'chapter-5 (Architecture Overview)' }
@@ -1527,6 +1713,34 @@ RSIntro >> rotation [
 		].
 
 	c @ RSCanvasController.
+	c open
+]
+
+{ #category : #'chapter-9 (Shape Composition)' }
+RSIntro >> shapeBorder [
+	"Run the example to see the results:
+
+	RSIntro new shapeBorder
+	
+	"
+
+	| c g compositeShape |
+	c := RSCanvas new.
+	1 to: 10 do: [ :i |
+		g := RSGroup new.
+		i timesRepeat: [ g add: RSCircle new ].
+		RSFlowLayout on: g.
+		compositeShape := g asShape.
+		compositeShape borderColor: Color black.
+		compositeShape padding: 5.
+		c add: compositeShape .
+		].
+
+	RSGridLayout new
+		gapSize: 50;
+		on: c shapes.
+	c shapes @ RSDraggable @ RSHighlightable red.
+	c zoomToFit.
 	c open
 ]
 
