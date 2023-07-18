@@ -493,6 +493,42 @@ RSIntro >> classDiagramImprovedV2 [
 	c open
 ]
 
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> combiningNormalizations [
+"Run the example to see the results: 
+	
+	RSIntro new combiningNormalizations
+	
+	"
+	| translations canvas shapes |
+	translations := #( 'Bonjour' 'Guten Morgen' 'Hola' 'Buongiorno' 'Dia dhuit' ).
+	
+	canvas := RSCanvas new.
+	shapes := RSBox models: translations.
+	canvas addAll: shapes .
+	
+	shapes @ RSLabeled .
+	
+	RSNormalizer height 
+		shapes: shapes;
+		normalize: [ :text | (text select: #isVowel) size ].
+		
+	RSNormalizer width 
+		shapes: shapes;
+		normalize: [ :text | (text reject: #isVowel) size ].
+	
+	RSNormalizer color 
+		shapes: shapes;
+		from: Color green;
+		to: Color blue;
+		normalize: [ :text | text size ].
+	
+	RSHorizontalLineLayout new gapSize: 30; alignMiddle; on: shapes.
+	
+	canvas zoomToFit.
+	canvas open. 
+]
+
 { #category : #'chapter-9 (Shape Composition)' }
 RSIntro >> compositeShapes [
 	"Run the example to see the results:
@@ -1320,6 +1356,47 @@ RSIntro >> lineMarkerLabels [
 	c open
 ]
 
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> lineWidth [
+"Run the example to see the results: 
+	
+	RSIntro new lineWidth
+	
+	"
+	| canvas shapes |
+	canvas := RSCanvas new.
+	shapes := RSEllipse models: Collection withAllSubclasses.
+	shapes @ RSDraggable @ RSPopup.
+	
+	canvas addAll: shapes.
+	
+	RSNormalizer color
+		shapes: shapes;
+		from: (Color gray alpha: 0.5 );
+		to: (Color red alpha: 0.5);
+		normalize: #numberOfMethods .
+		
+	RSNormalizer size
+		shapes: shapes;
+		normalize: #numberOfMethods.
+		
+	RSLineBuilder line 
+		canvas: canvas;
+		withBorderAttachPoint ;
+		connectFrom: #superclass.
+	
+	RSNormalizer width
+		shapes: canvas lines;
+		from: 2;
+		to: 10;
+		normalize: [ :association | (association key selectors intersection: association value selectors) size ].
+		
+	RSTreeLayout on: shapes.
+	
+		canvas @ RSCanvasController.
+		canvas open.	
+]
+
 { #category : #'chapter-7 (Shapes)' }
 RSIntro >> markerOffset [
 	"Set the marker away from the extremity"
@@ -1591,6 +1668,39 @@ RSIntro >> modelObject [
 		c open.
 ]
 
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> multipleScales [
+	"Run the example to see the results: 
+
+	RSIntro new multipleScales
+
+	"
+
+	| sc ss c s |
+	sc := NSScale linear
+		      range: {  #white. #gray. #red  };
+		      domain: {  0. 1. 2  }.
+
+	ss := NSScale linear
+		      range: {  80. 30. 80  };
+		      domain: {  0. 1. 2  }.
+	c := RSCanvas new.
+	0 to: 2 by: 0.1 do: [  :i |
+		s := RSBox new
+			     width: 30;
+			     height: (  ss scale: i  );
+			     model: i;
+			     color: (  sc scale: i  ).
+		c add: s
+		].
+
+	RSHorizontalLineLayout new
+		alignMiddle;
+		on: c shapes.
+	c zoomToFit.
+	c open
+]
+
 { #category : #'chapter-5 (Architecture Overview)' }
 RSIntro >> normalizer [
 	"Normalizers map numerical values to visualize attributes"
@@ -1632,6 +1742,199 @@ RSIntro >> normalizer [
 
 	c @ RSCanvasController.
 	c open
+]
+
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> normalizingAndTransformations [
+"Run the example to see the results: 
+	
+	RSIntro new normalizingAndTransformations
+	
+	"
+	| values canvas shapes |
+	values := #(3 6 10 2).
+	
+	canvas := RSCanvas new.
+	shapes := RSEllipse models: values.
+	canvas addAll: shapes.
+	
+	shapes @ RSLabeled.
+	
+	RSNormalizer size 
+		shapes: shapes;
+		normalize: [ :aNumber | aNumber ln ].
+		
+	RSHorizontalLineLayout new alignMiddle; on: shapes.
+	
+	canvas zoomToFit.
+	canvas open.
+	
+	
+]
+
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> normalizingShapePosition [
+"Run the example to see the results: 
+	
+	RSIntro new normalizingShapePosition
+	
+	"
+	| classes canvas dots |
+	classes := Collection withAllSubclasses .
+	canvas := RSCanvas new.
+	
+	dots := RSCircle models: classes forEach: [ :s :o | s borderColor: #black ].
+	canvas addAll: dots.
+	dots @ RSPopup.
+	
+	RSNormalizer size 	
+		shapes: dots;
+		from: 10;
+		to: 25;
+		normalize: #numberOfLinesOfCode.
+		
+	RSNormalizer color
+		shapes: dots;
+		from: Color yellow;
+		to: Color brown;
+		normalize: #numberOfLinesOfCode .
+		
+	canvas add: (RSArrowedLine new from: 0 @ 0; to: 0 @ -500).
+	
+RSNormalizer position 
+	shapes: dots;
+	from: 0 @ 0 ;
+	to: 500 @ -500;
+	normalize: [ :aClass | aClass numberOfMethods @ aClass numberOfLinesOfCode . ].
+	
+	canvas add: (RSArrowedLine new from: 0 @ 0; to: 0 @ -500). 
+	canvas add: (RSArrowedLine new from: 0 @ 0; to: 500 @ 0).
+	canvas zoomToFit.
+	canvas open.
+]
+
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> normalizingSize [
+"Run the example to see the results: 
+	
+	RSIntro new normalizingSize
+	
+	"
+	| values canvas shapes |
+	values := #(3 6 10 2).
+	
+	canvas := RSCanvas new.
+	shapes := RSEllipse models: values.
+	canvas addAll: shapes.
+	
+	shapes @ RSLabeled.
+	
+	RSNormalizer size 
+		shapes: shapes;
+		normalize.
+		
+	RSHorizontalLineLayout new alignMiddle; on: shapes.
+	
+	canvas zoomToFit.
+	canvas open.
+	
+	
+]
+
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> normalizingSizeRange [
+"Run the example to see the results: 
+	
+	RSIntro new normalizingSizeRange
+	
+	"
+	| values canvas shapes |
+	values := #(3 6 10 2).
+	
+	canvas := RSCanvas new.
+	shapes := RSEllipse models: values.
+	canvas addAll: shapes.
+	
+	shapes @ RSLabeled.
+	
+	RSNormalizer size 
+		shapes: shapes;
+		from: 10;
+		to: 30;
+		normalize.
+		
+	RSHorizontalLineLayout new alignMiddle; on: shapes.
+	
+	canvas zoomToFit.
+	canvas open.
+	
+	
+]
+
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> ordinalScaling [
+	"Run the example to see the results:
+	
+	RSIntro new ordinalScaling
+	
+	"
+
+	| c scale r txt g |
+	c := RSCanvas new.
+	scale := NSScale ordinalColored: 3.
+
+	r := Random seed: 42.
+	9 timesRepeat: [
+		txt := {  'txt'. 'bonjour'. 'Guten Morgen'  } atRandom: r.
+		g := RSGroup new.
+		g add: (  RSBox new
+				   width: 100;
+				   height: 20;
+				   model: txt;
+				   color: (  scale scale: txt  )  ).
+		g add: (  RSLabel new text: txt; fontSize: 10  ).
+		c add: g asShape
+		].
+	RSGridLayout new
+		lineItemsCount: 3;
+		on: c shapes.
+	c @ RSCanvasController.
+	c open
+]
+
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> ordinalScalingPallete [
+	"Associates a number to a particular color"
+	"Run the example to see the results:
+	
+	RSIntro new ordinalScalingPallete
+
+	"
+
+	| canvas scale r aNumber circle label composite |
+	canvas := RSCanvas new.
+	scale := NSScale category20c.
+
+	r := Random seed: 42.
+	81 timesRepeat: [
+		aNumber := r nextInteger: 10.
+		circle := RSCircle new
+			          size: 30;
+			          color: (  scale scale: aNumber  ).
+		label := RSLabel new
+			         color: Color black;
+			         text: aNumber.
+		composite := {
+			             circle.
+			             label  } asGroup asShapeFor: aNumber "Convert a RSGroup to a shape and add aNumber as a model for the shape".
+		canvas add: composite
+		].
+	RSGridLayout new
+		lineItemsCount: 9;
+		on: canvas nodes.
+
+	canvas @ RSCanvasController.
+	canvas open
 ]
 
 { #category : #'chapter-7 (Shapes)' }
@@ -1714,6 +2017,59 @@ RSIntro >> rotation [
 
 	c @ RSCanvasController.
 	c open
+]
+
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> scaling [
+"Run the example to see the results: 
+
+	RSIntro new scaling
+
+	"
+
+	| values scale canvas shapes |
+	values := 0 to: 1 by: 0.1.
+	scale := NSScale linear range: {
+			         Color blue.
+			         Color red  }.
+	canvas := RSCanvas new.
+	shapes := RSCircle
+		          models: values
+		          forEach: [  :shape :number |
+		          shape color: (  scale scale: number  )  ].
+	shapes @ RSPopup.
+	canvas addAll: shapes.
+	RSFlowLayout on: shapes.
+	canvas zoomToFit.
+	canvas open
+]
+
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> scalingV2 [
+	"Run the example to see the results: 
+
+	RSIntro new scalingV2
+
+	"
+
+	| values scale canvas shapes |
+	values := 0 to: 1 count: 20.
+	scale := NSScale linear
+		         range: {
+				         Color blue.
+				         Color gray.
+				         Color red  };
+		         domain: {  0. 0.5. 1  }.
+	canvas := RSCanvas new.
+	shapes := RSCircle
+		          models: values
+		          forEach: [  :shape :number |
+		          shape color: (  scale scale: number  )  ].
+	shapes @ RSPopup.
+	canvas addAll: shapes.
+	RSFlowLayout on: shapes.
+	canvas zoomToFit.
+	canvas open
 ]
 
 { #category : #'chapter-9 (Shape Composition)' }
