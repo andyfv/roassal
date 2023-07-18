@@ -1937,6 +1937,38 @@ RSIntro >> ordinalScalingPallete [
 	canvas open
 ]
 
+{ #category : #'chapter-10 (Normalizing and Scaling)' }
+RSIntro >> ordinalScalingPalleteV2 [
+	"Associates a number to a particular color"
+
+	"Run the example to see the results:
+	
+	RSIntro new ordinalScalingPalleteV2
+
+	"
+
+	| canvas pallete scale r aNumber circle |
+	canvas := RSCanvas new.
+	pallete := {  'e66e33'. 'fca300'. 'efdb2b'. 'a3bd21'. '009991'  }
+		           collect: [  :hexString | Color fromHexString: hexString  ].
+	scale := NSScale ordinal range: pallete.
+
+	r := Random seed: 42.
+
+	100 timesRepeat: [
+		aNumber := r nextInteger: 5.
+		circle := RSCircle new model: aNumber.
+		circle @ RSPopup.
+		circle color: (  scale scale: aNumber  ).
+		canvas add: circle
+		].
+
+	RSFlowLayout on: canvas nodes.
+
+	canvas @ RSCanvasController.
+	canvas open
+]
+
 { #category : #'chapter-7 (Shapes)' }
 RSIntro >> polygon [
 "Run the example to see the results:
