@@ -897,6 +897,203 @@ RSIntro >> graphVisualization [
 	c open
 ]
 
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> highlightShapes [
+	"Run the example to see the results:
+
+	RSIntro new highlightShapes
+	
+	"
+
+	| canvas shapes highlightable |
+	canvas := RSCanvas new.
+	shapes := RSEllipse models: (  1 to: 30  ).
+	shapes @ RSPopup @ RSDraggable.
+	canvas addAll: shapes.
+
+
+	highlightable := RSHighlightable new.
+	highlightable highlightColor: Color green.
+	highlightable highlightShapes: [  :aShape |
+		shapes select: [  :s |
+			(  -1 to: 1  ) includes: s model - aShape model  ]
+		].
+	shapes @ highlightable .
+	RSGridLayout on: shapes.
+
+	canvas @ RSCanvasController.
+	canvas open
+]
+
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> highlightWithEdges [
+	"Run the example to see the results:
+
+	RSIntro new highlightWithEdges
+	
+	"
+
+	| numberOfNodes numberOfLines r graph fromNode toNode canvas nodes highlightable lb |
+	numberOfNodes := 25.
+	numberOfLines := 90.
+	r := Random seed: 42.
+	graph := Dictionary new.
+
+	1 to: numberOfNodes do: [  :aNode | graph at: aNode put: Set new  ].
+
+	numberOfLines timesRepeat: [
+		fromNode := r nextInteger: numberOfNodes.
+		toNode := r nextInteger: numberOfNodes.
+		(  graph at: fromNode  ) add: toNode
+		].
+
+	canvas := RSCanvas new.
+	nodes := RSCircle models: (  1 to: numberOfNodes  ).
+	nodes @ RSDraggable @ RSPopup.
+	canvas addAll: nodes.
+
+	highlightable := RSHighlightable new.
+	highlightable highlightColor: Color red.
+	
+	highlightable withEdges.
+	nodes @ highlightable .
+	
+	lb := RSLineBuilder line.
+	lb canvas: canvas.
+	lb withBorderAttachPoint.
+	lb makeBidirectional .
+	lb moveBehind .
+	lb objects: (1 to: numberOfNodes).
+	lb connectToAll: [ :aNumber | graph at: aNumber ].
+	
+	RSForceBasedLayout new charge: -300; on: nodes.
+	canvas @ RSCanvasController.
+	canvas open.
+]
+
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> highlightWithEdgesCombined [
+	"Run the example to see the results:
+
+	RSIntro new highlightWithEdgesCombined
+	
+	"
+
+	| numberOfNodes numberOfLines r graph fromNode toNode canvas nodes highlightable lb highlightable2 |
+	numberOfNodes := 25.
+	numberOfLines := 90.
+	r := Random seed: 42.
+	graph := Dictionary new.
+
+	1 to: numberOfNodes do: [  :aNode | graph at: aNode put: Set new  ].
+
+	numberOfLines timesRepeat: [
+		fromNode := r nextInteger: numberOfNodes.
+		toNode := r nextInteger: numberOfNodes.
+		(  graph at: fromNode  ) add: toNode
+		].
+
+	canvas := RSCanvas new.
+	nodes := RSCircle models: (  1 to: numberOfNodes  ).
+	nodes @ RSDraggable @ RSPopup.
+	canvas addAll: nodes.
+
+	highlightable := RSHighlightable new.
+	highlightable highlightColor: Color red.
+	highlightable withEdges.
+	nodes @ highlightable.
+
+	highlightable2 := RSHighlightable new.
+	highlightable2 highlightColor: Color blue.
+	highlightable2 withConnectedShapes .
+	nodes @ highlightable2 .
+	
+	lb := RSLineBuilder line.
+	lb canvas: canvas.
+	lb withBorderAttachPoint.
+	lb makeBidirectional.
+	lb moveBehind.
+	lb objects: (  1 to: numberOfNodes  ).
+	lb connectToAll: [  :aNumber | graph at: aNumber  ].
+
+	RSForceBasedLayout new
+		charge: -300;
+		on: nodes.
+	canvas @ RSCanvasController.
+	canvas open
+]
+
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> highlightable [
+"Run the example to see the results:
+
+	RSIntro new highlightable
+	
+	"
+	
+	| canvas shapes |
+	canvas := RSCanvas new.
+	shapes := RSEllipse models: (1 to: 30).
+	
+	shapes @ RSPopup @ RSDraggable .
+	canvas addAll: shapes.
+	
+	shapes @ RSHighlightable red.
+	RSGridLayout on: shapes.
+	
+	canvas @ RSCanvasController .
+	canvas open.
+]
+
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> highlightableCustomized [
+	"Run the example to see the results:
+
+	RSIntro new highlightableCustomized
+	
+	"
+
+	| canvas shapes |
+	canvas := RSCanvas new.
+	shapes := RSEllipse models: (  1 to: 30  ).
+
+	shapes @ RSPopup @ RSDraggable.
+	canvas addAll: shapes.
+
+	shapes @ ( RSHighlightable new highlightColor: Color green ).
+	RSGridLayout on: shapes.
+
+	canvas @ RSCanvasController.
+	canvas open
+]
+
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> highlightshapes [
+	"Run the example to see the results:
+
+	RSIntro new highlightshapes
+	
+	"
+
+	| canvas shapes highlightable |
+	canvas := RSCanvas new.
+	shapes := RSEllipse models: (  1 to: 30  ).
+	shapes @ RSPopup @ RSDraggable.
+	canvas addAll: shapes.
+
+
+	highlightable := RSHighlightable new.
+	highlightable highlightColor: Color green.
+	highlightable highlightShapes: [  :aShape |
+		shapes select: [  :s |
+			(  -1 to: 1  ) includes: (s model - aShape model)  ]
+		].
+	RSGridLayout on: shapes.
+
+	canvas @ RSCanvasController.
+	canvas open
+]
+
 { #category : #'chapter-5 (Architecture Overview)' }
 RSIntro >> interactions [
 	"In this example there are three added interactions:
@@ -1057,6 +1254,79 @@ RSIntro >> labeledCircles [
 	RSTreeLayout on: c nodes.
 	c @ RSCanvasController.
 	c open.
+]
+
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> labels [
+	"Run the example to see the results: 	
+		
+		RSIntro new labels
+		
+		"
+
+	| canvas shapes |
+	canvas := RSCanvas new.
+	shapes := RSCircle models: (  1 to: 9  ).
+
+	canvas addAll: shapes.
+
+	shapes @ RSLabeled.
+	RSGridLayout new
+		gapSize: 40;
+		on: shapes.
+
+	canvas @ RSCanvasController.
+	canvas open
+]
+
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> labelsCustomized [
+	"Run the example to see the results: 	
+		
+		RSIntro new labelsCustomized
+		
+		"
+
+	| canvas shapes |
+	canvas := RSCanvas new.
+	shapes := RSCircle models: (  1 to: 9  ).
+
+	canvas addAll: shapes.
+
+	shapes
+	@
+	(  RSLabeled new text: [  :aModel | 'value = ' , aModel asString  ]  ).
+	RSGridLayout new
+		gapSize: 20;
+		on: shapes.
+
+	canvas @ RSCanvasController.
+	canvas open
+]
+
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> labelsHighlightable [
+	"Run the example to see the results: 	
+		
+		RSIntro new labelsHighlightable
+		
+		"
+
+	| canvas shapes |
+	canvas := RSCanvas new.
+	shapes := RSCircle models: (  1 to: 9  ).
+
+	canvas addAll: shapes.
+
+	shapes
+	@
+	(  RSLabeled new text: [  :aModel | 'value = ' , aModel asString  ]; highlightable ).
+	RSGridLayout new
+		gapSize: 20;
+		on: shapes.
+
+	canvas @ RSCanvasController.
+	canvas open
 ]
 
 { #category : #'chapter-5 (Architecture Overview)' }
@@ -2006,6 +2276,94 @@ RSIntro >> polygon [
 	c open
 ]
 
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> popup [
+	"Run the example to see the results: 
+	
+	RSIntro new popup
+	
+	"
+
+	| canvas shapes popup |
+	canvas := RSCanvas new.
+	shapes := RSLabel models: (1 to: 10).
+	
+	canvas addAll: shapes. 
+	RSGridLayout on: shapes.
+	
+	popup := RSPopup new.
+	popup shapeBuilder: [ :aNumber |
+		| g |
+		g := RSGroup new.
+		g addAll: (RSCircle models: ( 1 to: aNumber ) ).
+		RSGridLayout on: g.
+		g asShape
+			color: Color white darker darker;
+			padding: 5. 
+		].
+		
+	shapes @ popup.
+	shapes @ RSHighlightable red.
+		
+	canvas zoomToFit.
+	canvas open. 
+]
+
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> popupComplex [
+	"Run the example to see the results: 
+	
+	RSIntro new popupComplex
+	
+	"
+
+	| packages canvas shapes popup lb |
+	packages := RPackageOrganizer default packages select: [  :rPack |
+		            rPack packageName beginsWith: 'Roassal3'  ].
+
+	canvas := RSCanvas new.
+	shapes := RSBox models: packages.
+	canvas addAll: shapes.
+
+	shapes @ RSDraggable.
+
+	RSNormalizer size
+		shapes: shapes;
+		from: 5;
+		to: 20;
+		normalize: [  :rPackage | rPackage definedClasses size  ].
+
+	popup := RSPopup new.
+	popup shapeBuilder: [  :package |
+		| g nodes lbl |
+		g := RSGroup new.
+		nodes := RSBox models: package definedClasses.
+		nodes color: Color blue.
+		g addAll: nodes.
+
+		lb := RSLineBuilder orthoVertical.
+		lb canvas: g.
+		lb shapes: nodes.
+		lb connectFrom: #superclass.
+
+		RSTreeLayout on: nodes.
+
+		lbl := RSLabel text: package packageName.
+		g add: lbl.
+		RSLocation move: lbl above: nodes.
+		g asShape
+			color: Color white darker translucent;
+			borderColor: #black;
+			padding: 3
+		].
+
+	shapes @ popup.
+	
+	RSFlowLayout on: shapes.
+	canvas @ RSCanvasController.
+	canvas open.
+]
+
 { #category : #'chapter-6 (Canvas)' }
 RSIntro >> removeWindow [
 	"Removing the window from the Pharo environement"
@@ -2164,6 +2522,27 @@ RSIntro >> shapesWithTitle [
 	RSCanvas new 
 		add: (RSBox new size: 100; color: #blue);
 		openWithTitle: 'This is a blue box'.
+]
+
+{ #category : #'chapter-11 (Interactions)' }
+RSIntro >> simpleInteractions [
+	"Run the example to see the results:
+	
+	RSIntro new simpleInteractions 
+	
+	"
+
+	| canvas shapes |
+	canvas := RSCanvas new.
+	shapes := RSCircle models: (  1 to: 100  ).
+	
+	canvas addAll: shapes.
+	shapes @ RSDraggable @ RSPopup.
+	
+	RSGridLayout on: shapes.
+	
+	canvas @ RSCanvasController .
+	canvas open.
 ]
 
 { #category : #'chapter-2' }
