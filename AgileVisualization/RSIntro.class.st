@@ -397,6 +397,95 @@ c @ RSCanvasController .
 c open.
 ]
 
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> circleLayout [
+"Run the example to see the results:
+
+	RSIntro new circleLayout
+	
+	"
+	
+	| nodes canvas shapes |
+	nodes := (1 to: 5).
+	canvas := RSCanvas new.
+	shapes := RSCircle models: nodes.
+	shapes size: 30.
+	canvas addAll: shapes.
+	
+	RSCircleLayout on: shapes.
+	canvas @ RSCanvasController .
+	canvas open.
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> circleLayoutDisparity [
+	"Run the example to see the results:
+
+	RSIntro new circleLayoutDisparity
+	
+	"
+
+	| nodes canvas shapes |
+	nodes := (1 to: 20) asArray shuffleBy: (Random seed: 42). 
+	canvas := RSCanvas new.
+	shapes := RSCircle models: nodes.
+	canvas addAll: shapes.
+	
+	RSNormalizer size 
+		shapes: shapes;
+		normalize.
+
+	RSCircleLayout on: shapes.
+	canvas @ RSCanvasController.
+	canvas open
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> circleLayoutDisparityEquidistand [
+	"Run the example to see the results:
+
+	RSIntro new circleLayoutDisparityEquidistand
+	
+	"
+
+	| nodes canvas shapes |
+	nodes := (  1 to: 20  ) asArray shuffleBy: (  Random seed: 42  ).
+	canvas := RSCanvas new.
+	shapes := RSCircle models: nodes.
+	canvas addAll: shapes.
+
+	RSNormalizer size
+		shapes: shapes;
+		normalize.
+
+	RSEquidistantCircleLayout on: shapes.
+	canvas @ RSCanvasController.
+	canvas open
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> circleLayoutEquidistandDisparity [
+	"Run the example to see the results:
+
+	RSIntro new circleLayoutDisparity
+	
+	"
+
+	| nodes canvas shapes |
+	nodes := (  1 to: 20  ) asArray shuffleBy: (  Random seed: 42  ).
+	canvas := RSCanvas new.
+	shapes := RSCircle models: nodes.
+	canvas addAll: shapes.
+
+	RSNormalizer size
+		shapes: shapes;
+		normalize.
+
+	RSCircleLayout on: shapes.
+	canvas @ RSCanvasController.
+	canvas open
+]
+
 { #category : #'chapter-8 (Line Builder)' }
 RSIntro >> classDiagram [
 "Run the example to see the results:
@@ -636,6 +725,160 @@ RSIntro >> compositeWithLines [
 	c open
 ]
 
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> conditionalLayout [
+	"Run the example to see the results:
+
+	RSIntro new conditionalLayout
+	
+	"
+	
+	| numberOfNodes numberOfLines r graph fromNode toNode canvas nodes lb |
+	numberOfNodes := 50.
+	numberOfLines := 20.
+	
+	r := Random seed: 42.
+	
+	graph := Dictionary new.
+	
+	1 to: numberOfNodes do: [ :aNode |
+		graph at: aNode put: Set new. ].
+	
+	numberOfLines timesRepeat: [ 
+		fromNode := r nextInteger: numberOfNodes.
+		toNode   := r nextInteger: numberOfNodes .
+		
+		(graph at: fromNode) add: toNode. 
+		].
+	
+	canvas := RSCanvas new.
+	nodes  := RSCircle models: (1 to: numberOfNodes).
+	nodes color: Color red.
+	nodes @ RSDraggable @ RSPopup.
+	
+	canvas addAll: nodes.
+	
+	lb := RSLineBuilder line.
+	lb canvas: canvas.
+	lb withBorderAttachPoint .
+	lb makeBidirectional .
+	lb moveBehind.
+	lb objects: (1 to: numberOfNodes).
+	lb connectToAll: [ :aNumber | graph at: aNumber ].
+	
+	RSForceBasedLayout new 
+		charge: -100; 							"charge takes a negative number that represents the negative charge of the nodes"
+		"friction: number"   				"friction is a number betweetn 0 and 1 that represents the friction when nodes are moved around. Higher friction -> moves slower."
+		"length: positiveNumber"		"sets the length of the edges"
+		"iterations: "
+		on: nodes.					
+	canvas @ RSCanvasController .
+	canvas open.
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> conditionalLayoutImproved [
+	"In this example the orphaned nodes are added to grid layout and moved to one side."
+	"Run the example to see the results:
+
+	RSIntro new conditionalLayoutImproved
+	
+	"
+	
+	| numberOfNodes numberOfLines r graph fromNode toNode canvas nodes lb |
+	numberOfNodes := 50.
+	numberOfLines := 20.
+	
+	r := Random seed: 42.
+	
+	graph := Dictionary new.
+	
+	1 to: numberOfNodes do: [ :aNode |
+		graph at: aNode put: Set new. ].
+	
+	numberOfLines timesRepeat: [ 
+		fromNode := r nextInteger: numberOfNodes.
+		toNode   := r nextInteger: numberOfNodes .
+		
+		(graph at: fromNode) add: toNode. 
+		].
+	
+	canvas := RSCanvas new.
+	nodes  := RSCircle models: (1 to: numberOfNodes).
+	nodes color: Color red.
+	nodes @ RSDraggable @ RSPopup.
+	
+	canvas addAll: nodes.
+	
+	lb := RSLineBuilder line.
+	lb canvas: canvas.
+	lb withBorderAttachPoint .
+	lb makeBidirectional .
+	lb moveBehind.
+	lb objects: (1 to: numberOfNodes).
+	lb connectToAll: [ :aNumber | graph at: aNumber ].
+	
+	RSConditionalLayout new
+		ifNotConnectedThen: RSGridLayout new;
+		else: (RSForceBasedLayout new charge: -100);
+		on: nodes.					
+	canvas @ RSCanvasController .
+	canvas open.
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> conditionalLayoutImprovedV2 [
+	"In this example the orphaned nodes are added to grid layout and moved to one side.
+	In addition, now each cluster is separately handled to reduce space"
+	"Run the example to see the results:
+
+	RSIntro new conditionalLayoutImprovedV2
+	
+	"
+	
+	| numberOfNodes numberOfLines r graph fromNode toNode canvas nodes lb |
+	numberOfNodes := 50.
+	numberOfLines := 20.
+	
+	r := Random seed: 42.
+	
+	graph := Dictionary new.
+	
+	1 to: numberOfNodes do: [ :aNode |
+		graph at: aNode put: Set new. ].
+	
+	numberOfLines timesRepeat: [ 
+		fromNode := r nextInteger: numberOfNodes.
+		toNode   := r nextInteger: numberOfNodes .
+		
+		(graph at: fromNode) add: toNode. 
+		].
+	
+	canvas := RSCanvas new.
+	nodes  := RSCircle models: (1 to: numberOfNodes).
+	nodes color: Color red.
+	nodes @ RSDraggable @ RSPopup.
+	
+	canvas addAll: nodes.
+	
+	lb := RSLineBuilder line.
+	lb canvas: canvas.
+	lb withBorderAttachPoint .
+	lb makeBidirectional .
+	lb moveBehind.
+	lb objects: (1 to: numberOfNodes).
+	lb connectToAll: [ :aNumber | graph at: aNumber ].
+	
+	RSConditionalLayout new
+		ifNotConnectedThen: RSGridLayout new;
+		else: (RSClusteringLayout new 																"Identifies clusters of connected nodes and applies a layout to each group"
+						clustersLayout: RSFlowLayout new;
+						forEachLayout: (RSForceBasedLayout new charge: -300));
+		on: nodes.					
+	canvas @ RSCanvasController .
+	canvas open.
+]
+
 { #category : #'chapter-6 (Canvas)' }
 RSIntro >> convertingCanvas [
 "Convert canvas to a shape"
@@ -782,6 +1025,116 @@ RSIntro >> fixedShape [
 	c open
 ]
 
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> flowLayout [
+	"Run the example to see the results:
+
+	RSIntro new flowLayout
+	
+	"
+
+	| nodes canvas shapes |
+	nodes := (  1 to: 20  ) asArray shuffleBy: (  Random seed: 42  ).
+	canvas := RSCanvas new.
+	shapes := RSCircle models: nodes.
+	canvas addAll: shapes.
+
+	RSNormalizer size
+		shapes: shapes;
+		normalize.
+
+	RSFlowLayout on: shapes.
+
+	canvas @ RSCanvasController.
+	canvas zoomToFit.
+	canvas open
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> flowLayoutRedo [
+	"Run the example to see the results:
+
+	RSIntro new flowLayoutRedo
+	
+	"
+
+	| nodes canvas shapes |
+	nodes := (  1 to: 20  ) asArray shuffleBy: (  Random seed: 42  ).
+	canvas := RSCanvas new.
+	shapes := RSCircle models: nodes.
+	canvas addAll: shapes.
+
+	RSNormalizer size
+		shapes: shapes;
+		normalize.
+
+	canvas
+		when: RSExtentChangedEvent
+		do: [  :event |
+			RSFlowLayout new
+				maxWidth: event newExtent x;
+				on: shapes
+			]
+		for: self.
+
+	RSFlowLayout on: shapes.
+
+	canvas @ RSCanvasController.
+	canvas zoomToFit.
+	canvas open
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> forceBasedLayout [
+	"Run the example to see the results:
+
+	RSIntro new forceBasedLayout
+	
+	"
+	
+	| numberOfNodes numberOfLines r graph fromNode toNode canvas nodes lb |
+	numberOfNodes := 25.
+	numberOfLines := 40.
+	
+	r := Random seed: 42.
+	
+	graph := Dictionary new.
+	
+	1 to: numberOfNodes do: [ :aNode |
+		graph at: aNode put: Set new. ].
+	
+	numberOfLines timesRepeat: [ 
+		fromNode := r nextInteger: numberOfNodes.
+		toNode   := r nextInteger: numberOfNodes .
+		
+		(graph at: fromNode) add: toNode. 
+		].
+	
+	canvas := RSCanvas new.
+	nodes  := RSCircle models: (1 to: numberOfNodes).
+	nodes color: Color red.
+	nodes @ RSDraggable @ RSPopup.
+	
+	canvas addAll: nodes.
+	
+	lb := RSLineBuilder line.
+	lb canvas: canvas.
+	lb withBorderAttachPoint .
+	lb makeBidirectional .
+	lb moveBehind.
+	lb objects: (1 to: numberOfNodes).
+	lb connectToAll: [ :aNumber | graph at: aNumber ].
+	
+	RSForceBasedLayout new 
+		charge: -300; 							"charge takes a negative number that represents the negative charge of the nodes"
+		"friction: number"   				"friction is a number betweetn 0 and 1 that represents the friction when nodes are moved around. Higher friction -> moves slower."
+		"length: positiveNumber"		"sets the length of the edges"
+		"iterations: "
+		on: nodes.					
+	canvas @ RSCanvasController .
+	canvas open.
+]
+
 { #category : #'chapter-2' }
 RSIntro >> graphRendering [
 
@@ -895,6 +1248,55 @@ RSIntro >> graphVisualization [
 		on: nodes.
 	c @ RSCanvasController.
 	c open
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> gridLayout [
+	"Run the example to see the results:
+
+	RSIntro new gridLayout
+	
+	"
+
+	| nodes canvas shapes |
+	nodes := (  1 to: 20  ) asArray shuffleBy: (  Random seed: 42  ).
+	canvas := RSCanvas new.
+	shapes := RSCircle models: nodes.
+	canvas addAll: shapes .
+
+	RSNormalizer size
+		shapes: shapes;
+		normalize.
+
+	RSGridLayout on: shapes.
+	canvas @ RSCanvasController.
+	canvas open
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> gridLayoutItemsPerLine [
+	"Run the example to see the results:
+
+	RSIntro new gridLayoutItemsPerLine
+	
+	"
+
+	| nodes canvas shapes |
+	nodes := (  1 to: 20  ) asArray shuffleBy: (  Random seed: 42  ).
+	canvas := RSCanvas new.
+	shapes := RSCircle models: nodes.
+	canvas addAll: shapes.
+
+	RSNormalizer size
+		shapes: shapes;
+		normalize.
+
+	RSGridLayout new
+		lineItemsCount: 10;
+		on: shapes.
+
+	canvas @ RSCanvasController.
+	canvas open
 ]
 
 { #category : #'chapter-11 (Interactions)' }
@@ -1550,6 +1952,117 @@ RSIntro >> lineControlPointsDraggable [
 	canvas add: bezierLine.
 	canvas zoomToFit.
 	canvas open.
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> lineLayout [
+	"Run the example to see the results:
+
+	RSIntro new lineLayout
+	
+	"
+
+	| nodes canvas shapes |
+	nodes := (  1 to: 20  ) asArray shuffleBy: (  Random seed: 42  ).
+	canvas := RSCanvas new.
+	shapes := RSCircle models: nodes.
+	canvas addAll: shapes.
+
+	RSNormalizer size
+		shapes: shapes;
+		normalize.
+
+	RSHorizontalLineLayout on: shapes.
+	canvas @ RSCanvasController.
+	canvas zoomToFit.
+	canvas open
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> lineLayoutComposition [
+	"Run the example to see the results:
+
+		RSIntro new lineLayoutComposition		
+	
+	"
+
+	| group canvas |
+	canvas := RSCanvas new.
+
+	1 to: 10 do: [  :nb |
+		group := RSGroup new.
+		group add: (  RSLabel text: nb  ).
+		nb timesRepeat: [  group add: RSCircle new  ].
+
+		"Horizontally align the label and its circles"
+		RSHorizontalLineLayout new
+			alignMiddle;
+			on: group.
+		canvas add:
+			group asShape "Create a composite of the label and the circles"
+		].
+
+	RSVerticalLineLayout on: canvas nodes "Vertically align the composites".
+	canvas zoomToFit.
+	canvas open
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> lineLayoutCompositionAlignment [
+	"Run the example to see the results:
+
+		RSIntro new lineLayoutCompositionAlignment		
+	
+	"
+
+	| group canvas |
+	canvas := RSCanvas new.
+
+	1 to: 10 do: [  :nb |
+		group := RSGroup new.
+		group add: (  RSLabel text: nb  ).
+		nb timesRepeat: [  group add: RSCircle new  ].
+
+		"Horizontally align the label and its circles"
+		RSHorizontalLineLayout new
+			alignMiddle;
+			on: group.
+		canvas add:
+			group asShape "Create a composite of the label and the circles"
+		].
+
+	RSVerticalLineLayout new alignRight; on: canvas nodes "Vertically align the composites".
+	canvas zoomToFit.
+	canvas open
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> lineLayoutCompositionalignment [
+	"Run the example to see the results:
+
+		RSIntro new lineLayoutCompositionalignment		
+	
+	"
+
+	| group canvas |
+	canvas := RSCanvas new.
+
+	1 to: 10 do: [  :nb |
+		group := RSGroup new.
+		group add: (  RSLabel text: nb  ).
+		nb timesRepeat: [  group add: RSCircle new  ].
+
+		"Horizontally align the label and its circles"
+		RSHorizontalLineLayout new
+			alignMiddle;
+			on: group.
+		canvas add:
+			group asShape "Create a composite of the label and the circles"
+		].
+
+	RSVerticalLineLayout new alignRight; on: canvas nodes "Vertically align the composites".
+	canvas zoomToFit.
+	canvas open
 ]
 
 { #category : #'chapter-7 (Shapes)' }
@@ -2364,6 +2877,59 @@ RSIntro >> popupComplex [
 	canvas open.
 ]
 
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> rectanglePackLayout [
+	"Run the example to see the results:
+
+	RSIntro new rectanglePackLayout
+	
+	"
+
+	| nodes canvas shapes |
+	nodes := (  1 to: 20  ) asArray shuffleBy: (  Random seed: 42  ).
+	canvas := RSCanvas new.
+	shapes := RSCircle models: nodes.
+	canvas addAll: shapes.
+
+	RSNormalizer size
+		shapes: shapes;
+		normalize.
+
+	RSRectanglePackLayout on: shapes.
+
+	canvas @ RSCanvasController.
+	canvas zoomToFit.
+	canvas open
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> rectanglePackLayoutComplex [
+	"Run the example to see the results:
+
+	RSIntro new rectanglePackLayoutComplex
+	
+	"
+
+	| numberOfBoxes r shapes canvas |
+	numberOfBoxes := 900.
+	r := Random seed: 42.
+
+	shapes := RSGroup new.
+	numberOfBoxes timesRepeat: [
+		shapes add: (  RSBox new
+				   width: (  r nextInteger: 40  );
+				   height: (  r nextInteger: 40  )  )
+		].
+
+	canvas := RSCanvas new.
+	canvas addAll: shapes.
+	
+	RSRectanglePackLayout new on: shapes.
+	
+	canvas @ RSCanvasController.
+	canvas open.
+]
+
 { #category : #'chapter-6 (Canvas)' }
 RSIntro >> removeWindow [
 	"Removing the window from the Pharo environement"
@@ -2595,6 +3161,68 @@ RSIntro >> svgPath [
 	c add: svg.
 	c @ RSCanvasController.
 	c open.
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> treeLayout [
+	"Run the example to see the results:
+
+	RSIntro new treeLayout
+	
+	"
+
+	| nodes canvas shapes |
+	nodes := (  1 to: 20  ) asArray shuffleBy: (  Random seed: 42  ).
+	canvas := RSCanvas new.
+
+	shapes := RSCircle models: nodes.
+	shapes withBorder.
+	shapes color: Color white.
+	shapes @ RSLabeled middle.
+	shapes @ RSDraggable .
+
+	canvas addAll: shapes.
+
+	RSNormalizer size
+		shapes: shapes;
+		from: 20;
+		to: 40;
+		normalize.
+
+	RSLineBuilder line 
+		withBorderAttachPoint;
+		shapes: shapes;
+		connectFrom: [ :nb | nb // 2 ] .
+		
+	RSTreeLayout  on: shapes.
+		
+	canvas @ RSCanvasController.
+	canvas zoomToFit.
+	canvas open
+]
+
+{ #category : #'chapter-12 (Layouts)' }
+RSIntro >> treeLayoutClassHierarchy [
+	"Run the example to see the results:
+
+	RSIntro new treeLayoutClassHierarchy
+	
+	"
+
+	| classes canvas shapes |
+	classes := Collection withAllSubclasses .
+	canvas := RSCanvas new.
+	shapes := RSCircle models: classes.
+	canvas addAll: shapes.
+	
+	RSLineBuilder line 
+		shapes: shapes;
+		connectFrom: #superclass.
+		
+	RSTreeLayout on: shapes. 
+	
+	canvas zoomToFit.
+	canvas open.
 ]
 
 { #category : #'chapter-6 (Canvas)' }
