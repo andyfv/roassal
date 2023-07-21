@@ -1496,6 +1496,116 @@ RSIntro >> highlightshapes [
 	canvas open
 ]
 
+{ #category : #'chapter-13 (Inspector Integration)' }
+RSIntro >> inspector [
+"The Pharo inspector"
+"Run the example to see the results:
+		
+		RSIntro new inspector
+		
+		"
+		
+		| c |
+		c := OrderedCollection new.
+		c add: 10;
+			add: 15;
+			add: 19.
+			
+		c inspect.
+
+]
+
+{ #category : #'chapter-13 (Inspector Integration)' }
+RSIntro >> inspectorCollectionOfNumbers [
+"Inspect the collection with the added visualization method for the inspector"
+"Run the example to see the results:
+		
+		RSIntro new inspectorCollectionOfNumbers
+		
+		"
+		
+		| c |
+		c := OrderedCollection new.
+		c add: 10;
+			add: 15;
+			add: 19.
+			
+		"(c visualizeListOfNumbers) inspect."
+		c inspect
+
+]
+
+{ #category : #'chapter-13 (Inspector Integration)' }
+RSIntro >> inspectorCollections [
+"Inspect the collection with the added visualization method for the inspector"
+"Run the example to see the results:
+		
+		RSIntro new inspectorCollections
+		
+		"
+
+
+| x y1 y2 y3 |
+x := (-3.14 to: 3.14 by: 0.01).
+y1 := x collect: #sin.
+y2 := x collect: #tan.
+y3 := x collect: #cos.
+
+{ x . y1 . y2 . y3 } inspect
+]
+
+{ #category : #'chapter-13 (Inspector Integration)' }
+RSIntro >> inspectorCollectionsComplex [
+"Inspect the collection with the added visualization method for the inspector"
+"Run the example to see the results:
+		
+		RSIntro new inspectorCollectionsComplex
+		
+		"
+
+| numberOfCollections coll random coll2 y |
+
+numberOfCollections := 100.
+coll := OrderedCollection new.
+random := Random seed: 42.
+
+numberOfCollections timesRepeat: [ 
+	coll2 := OrderedCollection new.
+	y := 0.
+	(random nextInteger: 100) timesRepeat: [ 
+		coll2 add: y.
+		y := y + ( (-30 to: 30) atRandom ) ]. 
+	coll add: coll2.
+	].
+
+coll inspect
+]
+
+{ #category : #'chapter-13 (Inspector Integration)' }
+RSIntro >> inspectorNumbers [
+"Inspect the collection with the added visualization method for the inspector"
+"Run the example to see the results:
+		
+		RSIntro new inspectorNumbers
+		
+		"
+		
+		| c numOfValues y |
+		numOfValues := 1000.
+		y := 0.
+		c := OrderedCollection new.
+		
+		numOfValues timesRepeat: [ 
+			c add: y.
+			y := y + ( (-30 to: 30) atRandom ) ].
+		
+		
+			
+		"(c visualizeListOfNumbers) inspect."
+		c inspect
+
+]
+
 { #category : #'chapter-5 (Architecture Overview)' }
 RSIntro >> interactions [
 	"In this example there are three added interactions:
