@@ -67,51 +67,49 @@ m build.
 
 { #category : #'*AgileVisualization' }
 SequenceableCollection >> visualizeListOfNumbers [
+
 	| chart plot |
-	
 	"Added guard to check if all members of the collection are numbers"
-	(self allSatisfy: #isNumber) ifFalse: [ 
-		^ RSCanvas new 
-				add: (RSLabel text: 'Need to contain numbers' );
-				yourself.
-		].
-	
-	chart := RSChart new.
-	plot  := RSLinePlot new.
-	
+	(self allSatisfy: #isNumber) ifFalse: [
+		^ RSCanvas new
+			  add: (RSLabel text: 'Need to contain numbers');
+			  yourself ].
+
+	chart := RSCompositeChart new.
+	plot := RSLinePlot new.
+
 	plot y: self.
-	chart addPlot: plot.
-	
+	chart add: plot.
+
 	chart title: 'Visualing numbers'.
 	chart addDecoration: RSVerticalTick new.
 	chart addDecoration: RSHorizontalTick new.
 	chart mustInclude0inY.
-	
+
 	chart build.
-	^ chart canvas. 
+	^ chart canvas
 ]
 
 { #category : #'*AgileVisualization' }
 SequenceableCollection >> visualizeListOfNumbersNo0 [
+
 	| chart plot |
-	
 	"Added guard to check if all members of the collection are numbers"
-	(self allSatisfy: #isNumber) ifFalse: [ 
-		^ RSCanvas new 
-				add: (RSLabel text: 'Need to contain numbers' );
-				yourself.
-		].
-	
-	chart := RSChart new.
-	plot  := RSLinePlot new.
-	
+	(self allSatisfy: #isNumber) ifFalse: [
+		^ RSCanvas new
+			  add: (RSLabel text: 'Need to contain numbers');
+			  yourself ].
+
+	chart := RSCompositeChart  new.
+	plot := RSLinePlot new.
+
 	plot y: self.
-	chart addPlot: plot.
-	
+	chart add: plot.
+
 	chart title: 'Visualing numbers'.
 	chart addDecoration: RSVerticalTick new.
 	chart addDecoration: RSHorizontalTick new.
-	
+
 	chart build.
-	^ chart canvas. 
+	^ chart canvas
 ]
